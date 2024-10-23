@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anderson Scientific</title>
+    <style>
+        body {
+            background-color: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: white;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+        h1 {
+            font-size: 48px;
+            text-shadow: 0 0 20px white, 0 0 30px white, 0 0 40px white;
+        }
+        input {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid white;
+            border-radius: 5px;
+            outline: none;
+            background-color: black;
+            color: white;
+        }
+        .footer {
+            margin-top: 10px;
+            font-size: 12px;
+            color: white;
+        }
+        .marquee {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+        .marquee span {
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        #welcome-message {
+            display: none;
+            font-size: 32px;
+            margin-top: 20px;
+            text-shadow: 0 0 20px white;
+        }
+        .loader {
+            display: none;
+            margin-top: 20px;
+            font-size: 20px;
+        }
+        .message {
+            display: none;
+            font-size: 24px;
+            text-align: center;
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-shadow: 0 0 20px white;
+        }
+        .year {
+            cursor: pointer;
+            font-size: 48px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>ANDERSON SCIENTIFIC</h1>
+    <input type="text" id="inputField" placeholder="Введите текст...">
+    <div class="footer">Ran by Anderson Teller</div>
+    <div class="marquee">
+        <span>Anderson Scientific был основан в 1931 году Андерсоном Теллером как шаг к развитию человечества, за эти годы компания получила несколько званий как одна из лучших организаций по развитию страны, и помните все что у вас есть создано нами.</span>
+    </div>
+    <div id="welcome-message">Welcome</div>
+    <div class="loader" id="loader">Загрузка: 0%</div>
+    <div class="message" id="finalMessage"></div>
+
+    <script>
+        const inputField = document.getElementById('inputField');
+        const welcomeMessage = document.getElementById('welcome-message');
+        const loader = document.getElementById('loader');
+        const finalMessage = document.getElementById('finalMessage');
+
+        inputField.addEventListener('input', function() {
+            if (inputField.value === 'Ron Kuperman') {
+                welcomeMessage.style.display = 'block';
+                loader.style.display = 'block';
+                simulateLoading();
+            } else {
+                welcomeMessage.style.display = 'none';
+                loader.style.display = 'none';
+                finalMessage.style.display = 'none';
+            }
+        });
+
+        function simulateLoading() {
+            let progress = 0;
+            const interval = setInterval(() => {
+                if (progress < 163) {
+                    progress++;
+                    loader.textContent = `Загрузка: ${progress}%`;
+                } else {
+                    clearInterval(interval);
+                    showFinalMessages();
+                }
+            }, 30); // Скорость загрузки
+        }
+
+        function showFinalMessages() {
+            welcomeMessage.style.display = 'none';
+            loader.style.display = 'none';
+            finalMessage.innerHTML = `<div class="year" data-year="1931">1931</div>
+                                       <div class="year" data-year="1967">1967</div>
+                                       <div class="year" data-year="1992">1992</div>`;
+            finalMessage.style.display = 'block';
+
+            const years = finalMessage.getElementsByClassName('year');
+            for (let i = 0; i < years.length; i++) {
+                years[i].addEventListener('click', () => {
+                    if (years[i].textContent === '1967') {
+                        displayWashingtonLoop();
+                    }
+                    for (let j = 0; j < years.length; j++) {
+                        if (j !== i) years[j].style.display = 'none';
+                    }
+                });
+            }
+        }
+
+        function displayWashingtonLoop() {
+            finalMessage.innerHTML = '';
+            const text = `Весь штат стал непроницаемым. Люди, пытающиеся попасть внутрь штата, как будто автоматически возвращаются на точку входа или оказываются снаружи, даже не понимая, что произошло. Это явление было названо «Петля Вашингтона». 
+Поняв, что штат оказался изолирован аномальным способом, правительство немедленно начало действовать в рамках двух главных задач: удержать контроль над ситуацией и предотвратить панику среди населения. Это включает несколько ключевых шагов:<br>
+1. Информационная блокада и дезинформация.<br>
+2. Изоляция территории.`;
+            typeWriter(text, 0);
+        }
+
+        function typeWriter(text, i) {
+            if (i < text.length) {
+                finalMessage.innerHTML += text.charAt(i);
+                i++;
+                setTimeout(() => typeWriter(text, i), 50);
+            }
+        }
+    </script>
+</body>
+</html>
